@@ -46,3 +46,5 @@ RUN chmod -R 777 /var/www/html/tmp
 RUN chmod -R 777 /var/www/html/logs
 RUN chmod -R 777 /var/www/html/storage
 RUN chmod +x /var/www/html/plugins/ffmpeg/ffmpeg.exe
+
+CMD ["apachectl", "-DFOREGROUND"]

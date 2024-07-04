@@ -17,19 +17,16 @@
 ```
 
 NOTES:
-- Pick the [release](https://github.com/unacms/una/releases) you wish to download and update the Dockerfile accordingly (URL and folder name). 
+- Pick the [release](https://github.com/unacms/una/releases) you wish to download and update the Dockerfile accordingly (URL and folder name). Be extra cautious with the [compatibility](https://unacms.com/wiki/Requirements#php-version) between Una and php versions.
 > For this tutorial, I'll be using [UNA v.13.1.0](https://github.com/unacms/una/releases/tag/13.1.0).
-> Be extra cautious with the [compatibility](https://unacms.com/wiki/Requirements#php-version) between Una and php versions.
 
 3. Run the docker container.
+> Please change the exposed port number to your preferred port (e.g. 8080).
 ```sh
-    docker run -it \
-        -p 80:80 \
-        una-spacenook \
-        service apache2 start
+    docker run -d -p 80:80 una-spacenook
 ```
 
-5. Make sure the server is running properly.
+4. Make sure the server is running properly by visiting the website.
 
 ## Setup mySQL Database Server (using docker)
 You could use any mySQL database server setup. I'll be using mySQL on [Digital Ocean](https://m.do.co/c/e0a32d405649) (referral link) for this. It s pretty straightforward, tutorial is [here](https://docs.digitalocean.com/products/databases/mysql/how-to/).

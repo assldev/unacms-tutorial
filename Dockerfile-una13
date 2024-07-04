@@ -1,0 +1,50 @@
+# PHP (8.1) + APACHE BASE
+FROM php:8.1-apache
+
+# WITH CONFIG ALLOWED: https://unacms.com/wiki/Requirements#php-configuration
+COPY una-spacenook.ini /usr/local/etc/php/conf.d/una-spacenook.ini
+
+# REQUIRED PHP MODULES
+RUN apt-get update
+RUN apt-get upgrade
+# cron
+RUN apt-get install -y cron
+# php-mysql
+RUN docker-php-ext-install mysqli pdo pdo_mysql \
+    && docker-php-ext-enable pdo_mysql
+# php-zip
+RUN apt-get install -y \
+        libzip-dev \
+        && docker-php-ext-install zip
+# php-exif 
+RUN docker-php-ext-install exif \
+    && docker-php-ext-enable exif
+# php-gd
+RUN docker-php-ext-configure mysqli \
+    && docker-php-ext-install -j$(nproc) mysqli
+RUN apt-get update && apt-get install -y \
+    libfreetype-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-enable gd
+
+# DOWNLOAD UNA
+ADD https://github.com/unacms/una/releases/download/13.1.0/UNA-v.13.1.0.zip /var/www/html/
+
+# SETUP UNA
+WORKDIR /var/www/html
+RUN apt install unzip
+RUN unzip UNA-v.13.1.0.zip
+RUN mv UNA-v.13.1.0/* ./
+RUN chmod -R 755 /var/www/html
+RUN chmod -R 777 /var/www/html/inc
+RUN chmod -R 777 /var/www/html/cache
+RUN chmod -R 777 /var/www/html/cache_public
+RUN chmod -R 777 /var/www/html/tmp
+RUN chmod -R 777 /var/www/html/logs
+RUN chmod -R 777 /var/www/html/storage
+RUN chmod +x /var/www/html/plugins/ffmpeg/ffmpeg.exe
+
+CMD ["apachectl", "-DFOREGROUND"]

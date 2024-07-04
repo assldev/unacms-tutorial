@@ -1,4 +1,4 @@
-# How to deploy UNA CMS?
+# How to deploy UNA CMS using `docker`?
 1. Setup Una Application Server
 2. Setup mySQL Database Server
 3. Install Una Application
@@ -6,9 +6,29 @@
 
 ## Setup Un Application Server
 1. Clone this repository for Dockerfile at the machine you want to install the application server.
-2. Download Una source code.
-3. Build docker image.
-4. Run the docker container.
+```sh
+    git clone https://github.com/assldev/unacms-tutorial.git
+```
+
+2. Build docker image.
+```sh
+    cd unacms-tutorial
+    docker build -f Dockerfile-spacenook -t una-spacenook .
+```
+
+NOTES:
+- Pick the [release](https://github.com/unacms/una/releases) you wish to download and update the Dockerfile accordingly (URL and folder name). 
+> For this tutorial, I'll be using [UNA v.13.1.0](https://github.com/unacms/una/releases/tag/13.1.0).
+> Be extra cautious with the [compatibility](https://unacms.com/wiki/Requirements#php-version) between Una and php versions.
+
+3. Run the docker container.
+```sh
+    docker run -it \
+        -p 80:80 \
+        una-spacenook \
+        service apache2 start
+```
+
 5. Make sure the server is running properly.
 
 ## Setup mySQL Database Server (using docker)

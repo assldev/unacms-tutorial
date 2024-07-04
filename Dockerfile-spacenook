@@ -8,7 +8,7 @@ COPY una-spacenook.ini /usr/local/etc/php/conf.d/una-spacenook.ini
 RUN apt-get update
 RUN apt-get upgrade
 # cron
-RUN apt install -y cron
+RUN apt-get install -y cron
 # php-mysql
 RUN docker-php-ext-install mysqli pdo pdo_mysql \
     && docker-php-ext-enable pdo_mysql
@@ -30,9 +30,14 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-enable gd
 
+# DOWNLOAD UNA
+ADD https://github.com/unacms/una/releases/download/13.1.0/UNA-Spacenook-v.13.1.0.zip /var/www/html/
+
 # SETUP UNA
-COPY una-13.1-spacenook/ /var/www/html/
 WORKDIR /var/www/html
+RUN apt install unzip
+RUN unzip UNA-Spacenook-v.13.1.0.zip
+RUN mv UNA-Spacenook-v.13.1.0/* ./
 RUN chmod -R 755 /var/www/html
 RUN chmod -R 777 /var/www/html/inc
 RUN chmod -R 777 /var/www/html/cache
